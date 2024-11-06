@@ -2,14 +2,19 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     kotlin("kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
     namespace = "com.example.core"
     compileSdk = 34
 
-    viewBinding {
-        enable = true
+    buildFeatures {
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.7"
     }
 
     defaultConfig {
@@ -47,6 +52,22 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     // Hilt for Dependency Injection
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-compiler:2.44")
+    implementation("com.google.dagger:hilt-android:2.48")
+    kapt("com.google.dagger:hilt-compiler:2.48")
+
+    // Retrofit for API calls
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Lifecycle runtime
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+
+    // Jetpack Compose
+    implementation("androidx.compose.ui:ui:1.5.0")
+    implementation("androidx.compose.material:material:1.5.0")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.5.0")
+    implementation("androidx.activity:activity-compose:1.8.0")
+
+    //Navigation
+    implementation("com.github.terrakok:cicerone:7.1")
 }
