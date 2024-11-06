@@ -1,4 +1,4 @@
-package com.example.network.di
+package com.example.core.di
 
 import dagger.Module
 import dagger.Provides
@@ -16,14 +16,8 @@ object NetworkModule {
     @Provides
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://api.openweathermap.org/data/2.5/")
+            .baseUrl("https://api.openweathermap.org/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
-
-//    @Singleton
-//    @Provides
-//    fun provideWeatherApiService(retrofit: Retrofit): WeatherApiService {
-//        return retrofit.create(WeatherApiService::class.java)
-//    }
 }
