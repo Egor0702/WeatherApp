@@ -21,6 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "WeatherApp"
 include(":app")
-include(":network")
 include(":weatherInfo")
 include(":core")
+include(":weatherInfo-api")
