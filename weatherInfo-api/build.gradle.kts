@@ -2,10 +2,11 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     kotlin("kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
-    namespace = "com.example.network"
+    namespace = "com.example.weatherinfo_api"
     compileSdk = 34
 
     defaultConfig {
@@ -43,8 +44,8 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     // Hilt for Dependency Injection
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-compiler:2.44")
+    implementation("com.google.dagger:hilt-android:2.48")
+    kapt("com.google.dagger:hilt-compiler:2.48")
 
     // Retrofit for API calls
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
