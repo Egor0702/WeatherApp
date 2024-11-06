@@ -1,36 +1,36 @@
 package com.example.core.presentation
 
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.CallSuper
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModelProvider
-import androidx.viewbinding.ViewBinding
 import com.example.core.di.ViewModelFactory
+import com.example.core.navigation.BaseScreen
 import com.example.core.presentation.viewModel.BaseViewModel
-import javax.inject.Inject
 
-abstract class BaseFragment<VM : BaseViewModel, B : ViewBinding> :
+abstract class BaseFragment<VM : BaseViewModel> :
     Fragment() {
 
-    @Inject
-    protected lateinit var viewModelFactory: ViewModelFactory<VM>
+    abstract val viewModelFactory: ViewModelFactory<VM>
 
     val viewModel: VM by lazy {
-        getViewModelInstance()
+        ViewModelProvider(this, viewModelFactory)[getViewModelClass()]
     }
 
     abstract val viewModelType: Class<VM>
 
-    protected abstract fun createViewBinding(): B
 
-    /**
-     * Получение ViewModel
-     */
-    protected open fun getViewModelInstance(): VM {
-        return ViewModelProvider(this as Fragment, viewModelFactory)[viewModelType]
-    }
+    @Composable
+    abstract fun GetComposableContent()
 
-    abstract fun inject()
+    abstract fun getViewModelClass(): Class<VM>
 
 
     @CallSuper
@@ -38,4 +38,28 @@ abstract class BaseFragment<VM : BaseViewModel, B : ViewBinding> :
         lifecycle.addObserver(viewModel as LifecycleObserver)
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return ComposeView(requireContext()).apply {
+            setContent {
+                MaterialTheme {
+                    GetComposableContent()
+                }
+            }
+        }
+    }
+
+    /**
+     * Call reInit for viewModel
+     */
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        observeViewModel()
+        val args = arguments
+        if (args?.getBoolean(BaseScreen.reinitViewModelKey) == true) {
+            viewModel.init(args)
+        }
+    }
 }
